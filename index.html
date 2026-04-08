@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swift Rentals | Request a Reservation</title>
+  <meta name="description" content="Request a future reservation for a sedan or SUV with Swift Rentals in Miami. Exact vehicle is not guaranteed. Delivery available." />
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --panel: #131313;
+      --soft: #1c1c1c;
+      --text: #ffffff;
+      --muted: #c9c9c9;
+      --line: #2c2c2c;
+      --accent: #f3f3f3;
+      --success: #d8ffd8;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #000 0%, #0b0b0b 100%);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    a { color: var(--text); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      gap: 16px;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav a { color: var(--muted); }
+    .nav a:hover { color: var(--text); }
+
+    .hero {
+      padding: 68px 0 42px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.08), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: .98;
+      letter-spacing: -.03em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 58ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 1px solid var(--text);
+      font-weight: 700;
+      transition: .2s ease;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: var(--text);
+      color: #000;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+    }
+
+    .hero-card {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .stat {
+      display: grid;
+      gap: 4px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat:last-child { border-bottom: 0; }
+    .stat strong { font-size: 20px; }
+    .stat span { color: var(--muted); font-size: 14px; }
+
+    section {
+      padding: 46px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(26px, 4vw, 38px);
+      letter-spacing: -.02em;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      max-width: 68ch;
+      margin-bottom: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 8px 8px 0;
+    }
+
+    .rate-box strong {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .rate-box small, .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 16px;
+    }
+
+    .step {
+      position: relative;
+      padding-left: 70px;
+      min-height: 56px;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      background: var(--soft);
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #8a8a8a;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.07);
+    }
+
+    .checkline {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .checkline input {
+      width: 18px;
+      min-height: auto;
+      margin-top: 3px;
+    }
+
+    .fineprint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .contact-item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.02);
+    }
+
+    footer {
+      padding: 28px 0 50px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .notice {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .success-banner {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border: 1px solid #325532;
+      background: rgba(34, 72, 34, 0.45);
+      color: var(--success);
+      border-radius: 16px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid, .grid-2, .grid-3, .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Swift Rentals</div>
+      <nav class="nav">
+        <a href="#rates">Rates</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#reserve">Reserve</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Miami Vehicle Reservations</div>
+          <h1>Reserve a Sedan or SUV for a Future Pickup</h1>
+          <p>
+            Request your pickup and drop-off online in under a minute. Vehicle class is requested,
+            but exact make and model are <strong>not guaranteed</strong>. Pickup in Miami. Delivery also available.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#reserve">Request Reservation</a>
+            <a class="btn secondary" href="tel:3053190954">Call 305-319-0954</a>
+          </div>
+          <div class="notice">
+            Most clients come from Facebook Marketplace. This page is designed to let them send reservation requests quickly,
+            so you can review and confirm manually.
+          </div>
+        </div>
+
+        <aside class="card hero-card">
+          <div class="stat">
+            <strong>Sedans</strong>
+            <span>$75/day or about $500/week</span>
+          </div>
+          <div class="stat">
+            <strong>SUVs</strong>
+            <span>$80/day or about $530/week</span>
+          </div>
+          <div class="stat">
+            <strong>Deposit</strong>
+            <span>$200 security deposit collected from all clients</span>
+          </div>
+          <div class="stat">
+            <strong>Pickup</strong>
+            <span>2338 Atlantic Ave, Opa Locka, FL 33054</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="rates">
+      <div class="container">
+        <h2>Simple, clear rates</h2>
+        <p class="section-lead">
+          Show your pricing up front, while making it clear that reservations are requests and exact vehicles are not guaranteed.
+        </p>
+        <div class="grid-2">
+          <div class="card rate-box">
+            <strong>Sedans</strong>
+            <div class="muted">$75/day</div>
+            <div class="muted">About $500/week</div>
+          </div>
+          <div class="card rate-box">
+            <strong>SUVs</strong>
+            <div class="muted">$80/day</div>
+            <div class="muted">About $530/week</div>
+          </div>
+        </div>
+        <div class="notice">
+          Final pricing, availability, extension terms, and delivery details are confirmed after your request is reviewed.
+          Security deposit may be used for gas, tickets, tolls, or other approved charges under your rental terms.
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works">
+      <div class="container">
+        <h2>How it works</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="steps">
+              <div class="step">
+                <strong>Submit your request</strong><br />
+                Choose sedan or SUV, then enter your pickup and drop-off date and time.
+              </div>
+              <div class="step">
+                <strong>We review availability</strong><br />
+                Exact car is not guaranteed. We confirm based on available vehicles in the requested class.
+              </div>
+              <div class="step">
+                <strong>Get your confirmation</strong><br />
+                Once reviewed, Swift Rentals will contact you to finalize the reservation.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <strong style="display:block; margin-bottom:12px; font-size:20px;">Good to know</strong>
+            <span class="pill">Sedan or SUV request</span>
+            <span class="pill">Exact car not guaranteed</span>
+            <span class="pill">Miami pickup</span>
+            <span class="pill">Delivery available</span>
+            <span class="pill">Manual confirmation</span>
+            <span class="pill">Deposit required</span>
+            <div class="notice">
+              This setup works especially well for Facebook Marketplace leads because you can send one link and let clients request future dates without back-and-forth.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reserve">
+      <div class="container">
+        <h2>Request a reservation</h2>
+        <p class="section-lead">
+          Fill this out and Swift Rentals will review your request. Submitting this form does not guarantee a vehicle until you are contacted and confirmed.
+        </p>
+
+        <div class="card">
+          <form action="https://formsubmit.co/goswift24@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New Swift Rentals reservation request" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="https://example.com/thanks" />
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="fullName">Full name</label>
+                <input id="fullName" name="Full Name" type="text" required />
+              </div>
+              <div class="field">
+                <label for="phone">Phone number</label>
+                <input id="phone" name="Phone Number" type="tel" required />
+              </div>
+              <div class="field">
+                <label for="email">Email (optional)</label>
+                <input id="email" name="Email" type="email" />
+              </div>
+              <div class="field">
+                <label for="vehicleType">Vehicle type</label>
+                <select id="vehicleType" name="Vehicle Type" required>
+                  <option value="">Select one</option>
+                  <option>Sedan</option>
+                  <option>SUV</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="pickupDate">Pickup date</label>
+                <input id="pickupDate" name="Pickup Date" type="date" required />
+              </div>
+              <div class="field">
+                <label for="pickupTime">Pickup time</label>
+                <input id="pickupTime" name="Pickup Time" type="time" required />
+              </div>
+              <div class="field">
+                <label for="dropoffDate">Drop-off date</label>
+                <input id="dropoffDate" name="Drop-off Date" type="date" required />
+              </div>
+              <div class="field">
+                <label for="dropoffTime">Drop-off time</label>
+                <input id="dropoffTime" name="Drop-off Time" type="time" required />
+              </div>
+              <div class="field">
+                <label for="pickupMethod">Pickup or delivery</label>
+                <select id="pickupMethod" name="Pickup Method" required>
+                  <option value="">Select one</option>
+                  <option>Pickup in Miami / Opa Locka</option>
+                  <option>Delivery requested</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="paymentMethod">Preferred payment</label>
+                <select id="paymentMethod" name="Preferred Payment Method">
+                  <option value="">Select one</option>
+                  <option>Cash</option>
+                  <option>Zelle</option>
+                  <option>Either</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Notes</label>
+              <textarea id="notes" name="Notes" placeholder="Anything else you want us to know?"></textarea>
+            </div>
+
+            <label class="checkline">
+              <input type="checkbox" name="Agreement" required />
+              <span>I understand this is a reservation request only. Exact vehicle is not guaranteed, and Swift Rentals will contact me to confirm availability.</span>
+            </label>
+
+            <button class="btn primary" type="submit">Send Reservation Request</button>
+            <div class="fineprint">
+              First-time setup note: FormSubmit sends a confirmation email the first time so you can activate submissions to goswift24@gmail.com.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2>Contact & pickup</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="contact-list">
+              <div class="contact-item"><strong>Phone:</strong> <a href="tel:3053190954">305-319-0954</a></div>
+              <div class="contact-item"><strong>Email:</strong> <a href="mailto:goswift24@gmail.com">goswift24@gmail.com</a></div>
+              <div class="contact-item"><strong>Pickup:</strong> 2338 Atlantic Ave, Opa Locka, FL 33054</div>
+              <div class="contact-item"><strong>Service area:</strong> Miami pickup location, with delivery available</div>
+            </div>
+          </div>
+          <div class="card">
+            <strong style="display:block; margin-bottom:12px; font-size:20px;">Reservation terms</strong>
+            <p class="muted">Vehicle type requested: sedan or SUV</p>
+            <p class="muted">Exact make/model is not guaranteed</p>
+            <p class="muted">Reservation is not final until confirmed by Swift Rentals</p>
+            <p class="muted">Security deposit collected from all clients</p>
+            <p class="muted">Delivery availability confirmed case by case</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Swift Rentals. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Keep drop-off from being earlier than pickup.
+    const pickupDate = document.getElementById('pickupDate');
+    const dropoffDate = document.getElementById('dropoffDate');
+    pickupDate.addEventListener('change', () => {
+      dropoffDate.min = pickupDate.value;
+      if (dropoffDate.value && dropoffDate.value < pickupDate.value) {
+        dropoffDate.value = pickupDate.value;
+      }
+    });
+  </script>
+</body>
+</html>
